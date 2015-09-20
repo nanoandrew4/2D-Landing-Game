@@ -27,7 +27,7 @@ Game::Game()
 
     landingStrip = new QGraphicsPixmapItem();
     landingStrip->setPixmap(QPixmap(":/Graphics/Graphics/Runway.png"));
-    landingStrip->setPos(sceneWidth - 500, screenHeight - 244);
+    landingStrip->setPos(sceneWidth - 700, screenHeight -315 );
     scene->addItem(landingStrip);
 
     plane = new Plane();

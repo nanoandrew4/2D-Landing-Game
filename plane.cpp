@@ -17,7 +17,7 @@ extern double RC;
 Plane::Plane()
 {
     setRect(0,0,50,30);
-    setPos(50, screenHeight /3);
+    setPos(4000, screenHeight /3);
     setRotation(planeAngle);
     setFlags(QGraphicsItem::ItemIsFocusable);
     setFocus();
