@@ -17,7 +17,7 @@ extern double RC;
 Plane::Plane()
 {
     setRect(0,0,50,30);
-    setPos(4000, screenHeight /3);
+    setPos(50, screenHeight /3);
     setRotation(planeAngle);
     setFlags(QGraphicsItem::ItemIsFocusable);
     setFocus();
@@ -25,6 +25,10 @@ Plane::Plane()
     moveTimer = new QTimer();
     connect(moveTimer, SIGNAL(timeout()), this, SLOT(movePlane()));
     moveTimer->start(1000/33);
+
+    thrustTimer = new QTimer();
+    connect(moveTimer, SIGNAL(timeout()), this, SLOT(planeThrust()));
+    thrustTimer->start(100);
 }
 
 double altitude = screenHeight /3;
@@ -50,13 +54,11 @@ void Plane::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Right){
         if(planeAngle < 90){
             planeAngle++;
-            setRotation(planeAngle);
         }
     }
     if(event->key() == Qt::Key_Left){
         if(planeAngle > -90){
             planeAngle--;
-            setRotation(planeAngle);
         }
     }
     if(event->key() == Qt::Key_F){
@@ -100,11 +102,16 @@ void Plane::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void Plane::planeThrust()
+{
+    speed = thrust * 2.35;
+}
+
 void Plane::movePlane()
 {
+    altitude += RC;
 
-    speed = 2.35* thrust;
-    altitude -= RC;
+    setRotation(planeAngle);
 
     extern Game *game;
     game->centerOn(this);
@@ -131,6 +138,8 @@ void Plane::movePlane()
     //qDebug()<<flapAngle;
 
 }
+
+
 
 void Plane::brakesActivated()
 {

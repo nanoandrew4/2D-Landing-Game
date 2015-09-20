@@ -12,9 +12,11 @@ public:
     void keyPressEvent(QKeyEvent *event);
 private slots:
     void movePlane();
+    void planeThrust();
     void brakesActivated();
 private:
     QTimer *moveTimer;
+    QTimer *thrustTimer;
 };
 
 #endif // PLANE

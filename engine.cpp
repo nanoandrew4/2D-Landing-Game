@@ -18,7 +18,7 @@ double R = 287.05;
 double Cl = 0.8;
 double speed = 0;
 double airspeed = 0.0;
-double planeAngle = 10;
+int planeAngle = -10;
 int weight = 800;
 double gravForce = weight * 9.81;
 double drag = 0;
@@ -28,8 +28,7 @@ double psf2Pa = 47.88;
 int flapAngle = 0;
 int spoiler = 0;
 double RC = 0;
-double pi = 3.14159265;
-double radianConvert = pi /180;
+double radianConvert = 3.14159265/180;
 
 Engine::Engine()
 {
@@ -68,18 +67,18 @@ void Engine::planeMechanics()
         Cl = speed /145;
         lift = density * (0.5*pow(airspeed,2)) * Sref * Cl * cos(flapAngle * radianConvert); //use cosine since at 90mph is when best RC happens, done
         //RC change with speed needs to be fixed, very extreme now, needs to be more modest
-        RC = ((((lift / gravForce) /50) * (sin((airspeed / 20) *radianConvert)) / cos(flapAngle * radianConvert)) - gravForce /55000) / (1/planeAngle);
 
-        // speed should increase way more when on a negative pitch, should make changes more extreme to speed, done
-        // NEW - vertical displacement is barely affected, needs to be fixed by incrementing values or reducing airspeed in game
-        if(planeAngle > 0){airspeed *= cos(planeAngle*radianConvert); RC /= cos(planeAngle*radianConvert);} //increase lift and decrease speed at constant ratio, will want to do by increments in the game
-        if(planeAngle < 0){airspeed /= cos(planeAngle*radianConvert); RC *= sin(planeAngle*radianConvert)*RC;} //increase speed and decrease lift, RC, will want to do by increments in the game
+
+        //Tweak RC so that when Angle < 0 it does't increase more
+        if(planeAngle <= 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /20);}
+        if(planeAngle > 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /20);}
 
         if(spoiler == 1){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *9); RC -= cos(speed*(89.0/speed) *radianConvert);} //degrees and max speed (235) must be decimals or won't work
         if(spoiler == 2){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *2); RC -= (cos(speed*(89.0/speed) *radianConvert) *140);}
 
         //qDebug()<<drag;
         qDebug()<<RC;
+        //qDebug()<< planeAngle;
 }
 
 int windRand = 0;
