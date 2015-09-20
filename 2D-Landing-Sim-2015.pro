@@ -23,3 +23,6 @@ HEADERS  += \
     plane.h \
     engine.h \
     mainmenu.h
+
+RESOURCES += \
+    graphics+sound.qrc

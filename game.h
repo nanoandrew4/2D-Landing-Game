@@ -12,8 +12,9 @@
 class Game : public QGraphicsView{
 public:
     Game();
+    void drawBackground(QPainter *painter, const QRectF &rect);
     QGraphicsScene *scene;
-    QGraphicsRectItem *landingStrip;
+    QGraphicsPixmapItem *landingStrip;
     Plane *plane;
     Engine *engine;
     MainMenu *mainmenu;

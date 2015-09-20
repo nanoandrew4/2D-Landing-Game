@@ -7,6 +7,7 @@
 
 extern int screenWidth;
 extern int screenHeight;
+extern int sceneWidth;
 extern int planeAngle;
 extern int flapAngle;
 extern double speed;
@@ -16,7 +17,7 @@ extern double RC;
 Plane::Plane()
 {
     setRect(0,0,50,30);
-    setPos(50, screenHeight /3);
+    setPos(4000, screenHeight /3);
     setRotation(planeAngle);
     setFlags(QGraphicsItem::ItemIsFocusable);
     setFocus();
@@ -108,7 +109,7 @@ void Plane::movePlane()
     extern Game *game;
     game->centerOn(this);
 
-    if(pos().y() < 0 || pos().y() > screenHeight){
+    if(pos().y() < 0 || pos().y() > screenHeight || pos().x() > sceneWidth){
         qDebug()<<"plane deleted";
         delete this;
         exit(EXIT_SUCCESS);

@@ -2,10 +2,17 @@
 #include "plane.h"
 #include "mainmenu.h"
 
+#include <QGraphicsPixmapItem>
+
 
 int screenWidth = 1280;
 int screenHeight = 720;
 int sceneWidth = 5000;
+
+void Game::drawBackground(QPainter *painter, const QRectF &rect)
+{
+    painter->drawPixmap(0,0, sceneWidth, screenHeight, QPixmap(":/Graphics/Graphics/Background.png"));
+}
 
 Game::Game()
 {
@@ -18,9 +25,9 @@ Game::Game()
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setScene(scene);
 
-    landingStrip = new QGraphicsRectItem();
-    landingStrip->setRect(0,0,screenWidth /6,screenHeight /6);
-    landingStrip->setPos(sceneWidth - 500, screenHeight - screenHeight /6);
+    landingStrip = new QGraphicsPixmapItem();
+    landingStrip->setPixmap(QPixmap(":/Graphics/Graphics/Runway.png"));
+    landingStrip->setPos(sceneWidth - 500, screenHeight - 244);
     scene->addItem(landingStrip);
 
     plane = new Plane();
@@ -31,3 +38,4 @@ Game::Game()
     show();
 
 }
+
