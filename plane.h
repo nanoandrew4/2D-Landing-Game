@@ -13,7 +13,6 @@ public:
 private slots:
     void movePlane();
     void planeThrust();
-    void brakesActivated();
 private:
     QTimer *moveTimer;
     QTimer *thrustTimer;

@@ -8,14 +8,12 @@ class Engine : public QObject{
     Q_OBJECT
 public:
     Engine();
-public slots:
+private slots:
     void planeMechanics();
-    //void gravity();
     void wind();
     void microBursts();
 private:
     QTimer *planeMechTimer;
-    //QTimer *gravTimer;
     QTimer *windTimer;
     QTimer *microTimer;
 };

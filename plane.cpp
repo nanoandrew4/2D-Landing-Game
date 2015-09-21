@@ -1,5 +1,11 @@
+/*
+ * This class is in charge of the plane object, of drawing it, recieving input from keys to make plane function, as well as making any
+ * necessary changes to the different variables that control its movement through the scene. Also controls collisions with other objects
+ *  (such as the runway) and deletes the plane and exits the program if the plane goes off the scene.
+ */
+
 #include "plane.h"
-#include "game.h"
+#include "game.h" //to use centerOn function
 
 #include <QKeyEvent>
 #include <QList>
@@ -10,13 +16,18 @@ extern int screenHeight;
 extern int sceneWidth;
 extern int planeAngle;
 extern int flapAngle;
+extern int spoiler;
 extern double speed;
 extern double airspeed;
 extern double RC;
 
+double altitude = screenHeight /3;
+int brakes = 0;
+int thrust = 50;
+
 Plane::Plane()
 {
-    setRect(0,0,50,30);
+    setRect(0,0,85,50);
     setPos(4000, screenHeight /3);
     setRotation(planeAngle);
     setFlags(QGraphicsItem::ItemIsFocusable);
@@ -31,13 +42,7 @@ Plane::Plane()
     thrustTimer->start(100);
 }
 
-double altitude = screenHeight /3;
-double planeMinSpeed = 0.0;
-double planeMaxSpeed = 1.1;
-int flapPressCount = 0;
-int spoilerPressCount = 0;
-int brakesPressCount = 0;
-int thrust = 50;
+
 
 void Plane::keyPressEvent(QKeyEvent *event)
 {
@@ -65,35 +70,24 @@ void Plane::keyPressEvent(QKeyEvent *event)
         if(flapAngle < 40){
             flapAngle++;
         }
-        /*
-        flapPressCount++;
-        switch (flapPressCount) {
-        case 1:
-        {
-            flapAngle = 2;
-            break;
-        }
-        case 2:
-        {
-            flapAngle = 7;
-            break;
-        }
-        case 3:
-        {
-            flapAngle = 17;
-            break;
-        }
-
-        default:
-            flapPressCount = 0;
-            break;
-        }
-        */
     }
     if(event->key() == Qt::Key_G){
         if(flapAngle > 0){
             flapAngle--;
         }
+    }
+    if(event->key() == Qt::Key_S){
+        if(spoiler == 2){
+            spoiler = -1; //so that when spoiler is increased, equals 0 and not 1
+        }
+        if(spoiler < 2){
+            spoiler++;
+        }
+
+    }
+    if(event->key() == Qt::Key_B){
+        if(brakes == 1){brakes = -1;}
+        brakes++;
     }
     if(event->key() == Qt::Key_Escape){
         altitude = pos().y();
@@ -136,12 +130,5 @@ void Plane::movePlane()
     //qDebug()<<planeAngle;
     //qDebug()<<planeMaxSpeed;
     //qDebug()<<flapAngle;
-
-}
-
-
-
-void Plane::brakesActivated()
-{
 
 }

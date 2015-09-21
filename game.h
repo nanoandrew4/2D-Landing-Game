@@ -3,21 +3,30 @@
 
 #include "plane.h"
 #include "engine.h"
-#include "mainmenu.h"
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QGraphicsRectItem>
+#include <QGraphicsTextItem>
 
 class Game : public QGraphicsView{
+    Q_OBJECT
 public:
     Game();
-    void drawBackground(QPainter *painter, const QRectF &rect);
     QGraphicsScene *scene;
-    QGraphicsPixmapItem *landingStrip;
     Plane *plane;
     Engine *engine;
-    MainMenu *mainmenu;
+private:
+    void drawBackground(QPainter *painter, const QRectF &rect);
+    QGraphicsPixmapItem *landingStrip;
+    QGraphicsTextItem *airspeedText;
+    QGraphicsTextItem *RCtext;
+    QGraphicsTextItem *altitudeText;
+    QGraphicsTextItem *flapAngleText;
+    QGraphicsTextItem *spoilerPosText;
+    QGraphicsTextItem *brakesText;
+    QTimer *updateTextTimer;
+private slots:
+    void updateText();
 
 };
 

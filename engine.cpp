@@ -1,10 +1,16 @@
+/*
+ * This class is in charge of all mechanics and contains most of the variables that are manipulated for proper function of the game.
+ * Formulas for different mechanics are either made up to support proper function of the game,
+ * or actual formulas adapted for use on a computer. Real data has been used to attempt to model the real mechanics of the aircraft,
+ * with varying levels of success, and different patterns found in the data are in use. Physics might be questionable, as I have no knowledge
+ * in the matter except for what I was able to learn while working on the project.
+ */
+
 #include "engine.h"
-#include "plane.h"
 
 #include <QDebug>
 #include <cmath>
-
-extern Plane *plane;
+#include <QFont>
 
 extern int screenHeight;
 extern double altitude;
@@ -55,6 +61,7 @@ Engine::Engine()
 
 void Engine::planeMechanics()
 {
+
     //drag seems not to be working, check once everything is implemented
 
         temp = 288.15 - (0.00396 * (3.28/2)) * (screenHeight - altitude *27.7); // temperature in kelvin minus altitude times constant decrease per 2 feet divided by 2 in temperature (from data in performance check). Times 27.7 to make it scaled so that altitudes work compared to actual data
@@ -90,12 +97,8 @@ void Engine::wind()
     windRand = rand() %3;
     switch(windRand){
         case 0: //right
-            planeMaxSpeed+=0.2;
-            planeMinSpeed+=0.2;
         break;
         case 1: //left
-            planeMaxSpeed-=0.2;
-            //planeMinSpeed-=0.2;
         break;
         case 2: //down
         break;

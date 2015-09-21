@@ -15,14 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp \
     game.cpp \
     plane.cpp \
-    engine.cpp \
-    mainmenu.cpp
+    engine.cpp
 
 HEADERS  += \
     game.h \
     plane.h \
-    engine.h \
-    mainmenu.h
+    engine.h
 
 RESOURCES += \
     graphics+sound.qrc
