@@ -16,6 +16,7 @@ extern int screenHeight;
 extern double altitude;
 extern double planeMaxSpeed;
 extern double planeMinSpeed;
+extern bool crash;
 
 double density = 0;
 double pressure = 0;
@@ -39,9 +40,6 @@ double radianConvert = 3.14159265/180;
 Engine::Engine()
 {
     /*
-    gravTimer = new QTimer();
-    connect(gravTimer, SIGNAL(timeout()), this, SLOT(gravity()));
-    gravTimer->start(100);
 
     windTimer = new QTimer();
     connect(windTimer, SIGNAL(timeout()), this, SLOT(wind()));
@@ -61,6 +59,11 @@ Engine::Engine()
 
 void Engine::planeMechanics()
 {
+    if(crash == true){
+        //windTimer->stop();
+        //microTimer->stop();
+        planeMechTimer->stop();
+    }
 
     //drag seems not to be working, check once everything is implemented
 
@@ -77,14 +80,14 @@ void Engine::planeMechanics()
 
 
         //Tweak RC so that when Angle < 0 it does't increase more
-        if(planeAngle <= 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /20);}
-        if(planeAngle > 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /20);}
+        if(planeAngle <= 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /50);}
+        if(planeAngle > 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /5);}
 
         if(spoiler == 1){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *9); RC -= cos(speed*(89.0/speed) *radianConvert);} //degrees and max speed (235) must be decimals or won't work
         if(spoiler == 2){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *2); RC -= (cos(speed*(89.0/speed) *radianConvert) *140);}
 
         //qDebug()<<drag;
-        qDebug()<<RC;
+        //qDebug()<<RC;
         //qDebug()<< planeAngle;
 }
 

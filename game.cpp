@@ -15,11 +15,13 @@ int screenHeight = 720;
 int sceneWidth = 5000;
 
 extern double airspeed;
+extern int planeAngle;
 extern double RC;
 extern double altitude;
 extern int flapAngle;
 extern int spoiler;
 extern int brakes;
+extern bool crash;
 
 void Game::drawBackground(QPainter *painter, const QRectF &rect)
 {
@@ -53,6 +55,10 @@ Game::Game()
     airspeedText->setFont(QFont("times", 12));
     scene->addItem(airspeedText);
 
+    planeAngleText = new QGraphicsTextItem();
+    planeAngleText->setFont(QFont("times", 12));
+    scene->addItem(planeAngleText);
+
     RCtext = new QGraphicsTextItem();
     RCtext->setFont(QFont("times", 12));
     scene->addItem(RCtext);
@@ -73,6 +79,9 @@ Game::Game()
     brakesText->setFont(QFont("times", 12));
     scene->addItem(brakesText);
 
+    youLostText = new QGraphicsTextItem();
+    youLostText->setFont(QFont("times", 40));
+
     updateTextTimer = new QTimer();
     connect(updateTextTimer, SIGNAL(timeout()), this, SLOT(updateText()));
     updateTextTimer->start(1000/30);
@@ -86,22 +95,36 @@ void Game::updateText()
     airspeedText->setPlainText(QString("Airspeed: ") + QString::number(airspeed));
     airspeedText->setPos(plane->pos().x() -600, 2);
 
-    RCtext->setPlainText((QString("Rate Of Climb: ") + QString::number(-RC)));
-    RCtext->setPos(plane->pos().x() -600, 18);
+    planeAngleText->setPlainText(QString("Pitch: ") + QString::number(-planeAngle) + QString("º"));
+    planeAngleText->setPos(plane->pos().x() -600, 18);
 
-    altitudeText->setPlainText((QString("Altitude: ") + QString::number(altitude *27.7)));
-    altitudeText->setPos(plane->pos().x() - 600, 34);
+    RCtext->setPlainText((QString("Rate Of Climb: ") + QString::number(-RC)));
+    RCtext->setPos(plane->pos().x() -600, 34);
+
+    altitudeText->setPlainText((QString("Altitude: ") + QString::number(screenHeight * 27.7 - altitude *27.7)));
+    altitudeText->setPos(plane->pos().x() - 600, 50);
 
     flapAngleText->setPlainText((QString("Flap Angle: ") + QString::number(flapAngle)));
-    flapAngleText->setPos(plane->pos().x() -600, 50);
+    flapAngleText->setPos(plane->pos().x() -600, 66);
 
     if(spoiler == 0){spoilerPosText->setPlainText("Spoilers: Unarmed");}
     if(spoiler == 1){spoilerPosText->setPlainText("Spoilers: Flight");}
     if(spoiler == 2){spoilerPosText->setPlainText("Spoilers: Armed");}
-    spoilerPosText->setPos(plane->pos().x() -600, 66);
+    spoilerPosText->setPos(plane->pos().x() -600, 82);
 
     if(brakes == 0){brakesText->setPlainText("Brakes: Off");}
     if(brakes == 1){brakesText->setPlainText("Brakes: On");}
-    brakesText->setPos(plane->pos().x() -600, 82);
+    brakesText->setPos(plane->pos().x() -600, 98);
+
+    if(crash == true){
+        youLostText->setPlainText("You crashed the airplane");
+        youLostText->setPos(plane->pos().x() -400, 340);
+        scene->addItem(youLostText);
+        updateTextTimer->stop();
+
+        replay = new QPushButton("Replay", this);
+        replay->setGeometry(QRect(QPoint(4500, 400), QSize(100,50)));
+    }
+    show();
 
 }

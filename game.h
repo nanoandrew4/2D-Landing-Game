@@ -7,6 +7,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
+#include <QPushButton>
 
 class Game : public QGraphicsView{
     Q_OBJECT
@@ -24,7 +25,10 @@ private:
     QGraphicsTextItem *flapAngleText;
     QGraphicsTextItem *spoilerPosText;
     QGraphicsTextItem *brakesText;
+    QGraphicsTextItem *planeAngleText;
+    QGraphicsTextItem *youLostText;
     QTimer *updateTextTimer;
+    QPushButton* replay;
 private slots:
     void updateText();
 

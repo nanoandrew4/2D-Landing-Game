@@ -16,6 +16,7 @@ private slots:
 private:
     QTimer *moveTimer;
     QTimer *thrustTimer;
+    QGraphicsTextItem *youLostText;
 };
 
 #endif // PLANE

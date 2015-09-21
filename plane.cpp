@@ -8,8 +8,9 @@
 #include "game.h" //to use centerOn function
 
 #include <QKeyEvent>
-#include <QList>
 #include <QDebug>
+#include <QFont>
+#include <cmath>
 
 extern int screenWidth;
 extern int screenHeight;
@@ -24,14 +25,16 @@ extern double RC;
 double altitude = screenHeight /3;
 int brakes = 0;
 int thrust = 50;
+bool crash = false;
 
 Plane::Plane()
 {
     setRect(0,0,85,50);
-    setPos(4000, screenHeight /3);
+    setPos(75, screenHeight /3);
     setRotation(planeAngle);
     setFlags(QGraphicsItem::ItemIsFocusable);
     setFocus();
+    speed = 117.5; //so that the plane starts at reasonable speed
 
     moveTimer = new QTimer();
     connect(moveTimer, SIGNAL(timeout()), this, SLOT(movePlane()));
@@ -39,7 +42,7 @@ Plane::Plane()
 
     thrustTimer = new QTimer();
     connect(moveTimer, SIGNAL(timeout()), this, SLOT(planeThrust()));
-    thrustTimer->start(100);
+    thrustTimer->start(250);
 }
 
 
@@ -77,15 +80,10 @@ void Plane::keyPressEvent(QKeyEvent *event)
         }
     }
     if(event->key() == Qt::Key_S){
-        if(spoiler == 2){
-            spoiler = -1; //so that when spoiler is increased, equals 0 and not 1
-        }
-        if(spoiler < 2){
-            spoiler++;
-        }
-
+        if(spoiler == 2){spoiler = -1;}
+        if(spoiler < 2){spoiler++;}
     }
-    if(event->key() == Qt::Key_B){
+    if(event->key() == Qt::Key_B && pos().x() > 4400 && pos().y() > screenHeight - 330 && pos().y() < screenHeight -327.5){
         if(brakes == 1){brakes = -1;}
         brakes++;
     }
@@ -98,30 +96,39 @@ void Plane::keyPressEvent(QKeyEvent *event)
 
 void Plane::planeThrust()
 {
-    speed = thrust * 2.35;
+    if(speed <= thrust * 2.35){speed += 1.175;}
+    if(speed > thrust * 2.35){speed -= 1.175;}
 }
 
 void Plane::movePlane()
 {
-    altitude += RC;
 
-    setRotation(planeAngle);
+    if((-RC < -2.5 && pos().x() > 4400 && pos().y() > screenHeight - 330) || (pos().y() > 600) || (pos().x() > 4265 && pos().y() > screenHeight - 329)){
+        crash = true;
+        moveTimer->stop();
+        thrustTimer->stop();
+        return;
+    }
 
-    extern Game *game;
-    game->centerOn(this);
-
-    if(pos().y() < 0 || pos().y() > screenHeight || pos().x() > sceneWidth){
-        qDebug()<<"plane deleted";
+    if(pos().y() < 0 || pos().x() > sceneWidth){
         delete this;
         exit(EXIT_SUCCESS);
         //return;
     }
-    QList< QGraphicsItem *> collisionCheck = collidingItems();
 
-    if(collisionCheck.size() == 1){
+    if(pos().x() > 4400 && pos().y() > screenHeight - 330 && pos().y() < screenHeight -327.5){
         setPos(x() + airspeed *1000/36000, y()); //make altitude equal to y better, that way one bug is avoided where after contact is over or if you overshoot the plane drops to where it was supposed to be
         return;
     }
+    if(brakes > 0 && speed > 0){
+        speed -= sin(speed);
+    }
+
+    extern Game *game;
+    game->centerOn(this);
+
+    altitude += RC;
+    setRotation(planeAngle);
     setPos(x() + airspeed *1000/36000, altitude); // 36000 to make it fit to the scene, should be 3600 for m/s
 
     //qDebug() << pos().x();

@@ -1,0 +1,14 @@
+---------------------------------20/9/2015--------------------------------------
+
+- Remade Runway to fit in better with Background, as well as resizing from 600x120 to 700x140
+- Slowed rate of acceleration and deceleration to add realism (still need tweaking to make smoother)
+- Changed collision detection for coordinate detection, so that lands on white line on the runway, and detects when it crashed with the water or runway
+- Implemented crash mechanic, everything is stopped when it collides with anything, partially implemented replay button (is invisible and has no slot connected yet) and now uses RC to determine whether it crashed or landed, as well as different coordinates to see if it is on the runway or crashed against the rocks. Also displays text when the crash bool is true (set by crash detection mechanic)
+- Fixed altitude displayed so it shows correctly, before up was down and down was up (common mishap in Qt with its scene coordinate system)
+- Implemented brakes (not tested) to decrease speed gradually
+- RC changes more radically either way, but now changes more on negative pitch than on positive one (still needs work to finalize)
+- Added all relevant data to be displayed with text on screen, and updates at 30fps (as all other calculations do, with a bit of offset since all timers start at different times)
+- Corrected minor math issues, such as negatives, doubles and ints for better function
+- Added descriptions in the source files about each class (except main)
+- Changed the way altitude is measured, instead of using scene coordinates, multiplies them by a constant to make the max altitude higher and improve density of air calculations for improved accuracy
+- Added key input recognition for spoilers, flaps (up and down) and brakes
