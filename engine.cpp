@@ -10,6 +10,7 @@
 
 #include <QDebug>
 #include <cmath>
+#include <math.h>
 #include <QFont>
 
 extern int screenHeight;
@@ -17,6 +18,7 @@ extern double altitude;
 extern double planeMaxSpeed;
 extern double planeMinSpeed;
 extern bool crash;
+extern int brakes;
 
 double density = 0;
 double pressure = 0;
@@ -71,7 +73,7 @@ void Engine::planeMechanics()
         pressure = (2116.2 * pow(0.92532477, (screenHeight - altitude *27.7) /1000)) *psf2Pa; // multiply pressure at 0 feet by the ratio of decrease of pressure every foot. No need for metric conversion since psf is imperial. Taken from pattern in data on flight performance analysis
         density = pressure / (temp * R);
 
-        drag = abs(cos((speed /1.6) * radianConvert)); //needs fixing so that is incremental at decent rate, fixed, just using absolute value
+        drag = (speed /10.5) *fabs(cos(((speed)) * radianConvert));; //needs fixing so that is incremental at decent rate, fixed, just using absolute value
         airspeed = speed - drag; //need to be implemented in the game so that it increases and decreases at a certain rate, done
 
         Cl = speed /145;
@@ -80,11 +82,11 @@ void Engine::planeMechanics()
 
 
         //Tweak RC so that when Angle < 0 it does't increase more
-        if(planeAngle <= 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /50);}
-        if(planeAngle > 0){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /5);}
+        if(planeAngle <= 0 && brakes < 1){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /50);}
+        if(planeAngle > 0 && brakes < 1){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /5);}
 
-        if(spoiler == 1){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *9); RC -= cos(speed*(89.0/speed) *radianConvert);} //degrees and max speed (235) must be decimals or won't work
-        if(spoiler == 2){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *2); RC -= (cos(speed*(89.0/speed) *radianConvert) *140);}
+        if(spoiler == 1){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *9); RC += cos(speed*(89.0/speed) *radianConvert);} //degrees and max speed (235) must be decimals or won't work
+        if(spoiler == 2){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *2); RC += (cos(speed*(89.0/speed) *radianConvert) *3);}
 
         //qDebug()<<drag;
         //qDebug()<<RC;

@@ -9,10 +9,13 @@
 
 #include <QGraphicsPixmapItem>
 #include <QFont>
+#include <QDebug>
+#include <cstdlib>
 
 int screenWidth = 1280;
 int screenHeight = 720;
 int sceneWidth = 5000;
+double viewX = 0; // will calculate distance to view border
 
 extern double airspeed;
 extern int planeAngle;
@@ -22,6 +25,7 @@ extern int flapAngle;
 extern int spoiler;
 extern int brakes;
 extern bool crash;
+extern Game *game;
 
 void Game::drawBackground(QPainter *painter, const QRectF &rect)
 {
@@ -44,10 +48,10 @@ Game::Game()
     landingStrip->setPos(sceneWidth - 700, screenHeight -315 );
     scene->addItem(landingStrip);
 
+    engine = new Engine();
+
     plane = new Plane();
     scene->addItem(plane);
-
-    engine = new Engine();
 
     //adding all relevant data to screen
 
@@ -92,39 +96,106 @@ Game::Game()
 
 void Game::updateText()
 {
+    viewX = plane->pos().x() - 600;
     airspeedText->setPlainText(QString("Airspeed: ") + QString::number(airspeed));
-    airspeedText->setPos(plane->pos().x() -600, 2);
+    if(viewX <= 0){airspeedText->setPos(0,2);}
+    else if(viewX > 0 && viewX < 3725){airspeedText->setPos(viewX, 2);}
+    else if(viewX >= 3720){airspeedText->setPos(3725, 2);}
 
     planeAngleText->setPlainText(QString("Pitch: ") + QString::number(-planeAngle) + QString("º"));
-    planeAngleText->setPos(plane->pos().x() -600, 18);
+    if(viewX <= 0){planeAngleText->setPos(0, 18);}
+    else if(viewX > 0 && viewX < 3725){planeAngleText->setPos(viewX, 18);}
+    else if(viewX >= 3720){planeAngleText->setPos(3725, 18);}
 
     RCtext->setPlainText((QString("Rate Of Climb: ") + QString::number(-RC)));
-    RCtext->setPos(plane->pos().x() -600, 34);
+    if(viewX <= 0){RCtext->setPos(0,34);}
+    else if(viewX > 0 && viewX < 3725){RCtext->setPos(viewX, 34);}
+    else if(viewX >= 3720){RCtext->setPos(3725, 34);}
 
     altitudeText->setPlainText((QString("Altitude: ") + QString::number(screenHeight * 27.7 - altitude *27.7)));
-    altitudeText->setPos(plane->pos().x() - 600, 50);
+    if(viewX <= 0){altitudeText->setPos(0,50);}
+    else if(viewX > 0 && viewX < 3725){altitudeText->setPos(viewX, 50);}
+    else if(viewX >= 3720){altitudeText->setPos(3725, 50);}
 
     flapAngleText->setPlainText((QString("Flap Angle: ") + QString::number(flapAngle)));
-    flapAngleText->setPos(plane->pos().x() -600, 66);
+    if(viewX <= 0){flapAngleText->setPos(0,66);}
+    else if(viewX > 0 && viewX < 3725){flapAngleText->setPos(viewX, 66);}
+    else if(viewX >= 3720){flapAngleText->setPos(3725, 66);}
 
     if(spoiler == 0){spoilerPosText->setPlainText("Spoilers: Unarmed");}
-    if(spoiler == 1){spoilerPosText->setPlainText("Spoilers: Flight");}
-    if(spoiler == 2){spoilerPosText->setPlainText("Spoilers: Armed");}
-    spoilerPosText->setPos(plane->pos().x() -600, 82);
+    else if(spoiler == 1){spoilerPosText->setPlainText("Spoilers: Flight");}
+    else if(spoiler == 2){spoilerPosText->setPlainText("Spoilers: Armed");}
+    if(viewX <= 0){spoilerPosText->setPos(0,82);}
+    else if(viewX > 0 && viewX < 3725){spoilerPosText->setPos(viewX, 82);}
+    else if(viewX >= 3720){spoilerPosText->setPos(3725, 82);}
 
     if(brakes == 0){brakesText->setPlainText("Brakes: Off");}
     if(brakes == 1){brakesText->setPlainText("Brakes: On");}
-    brakesText->setPos(plane->pos().x() -600, 98);
+    if(viewX <= 0){brakesText->setPos(0,98);}
+    else if(viewX > 0 && viewX < 3725){brakesText->setPos(viewX, 98);}
+    else if(viewX >= 3720){brakesText->setPos(3725, 98);}
 
     if(crash == true){
         youLostText->setPlainText("You crashed the airplane");
-        youLostText->setPos(plane->pos().x() -400, 340);
+        if(viewX <= 0){youLostText->setPos(350, 300);}
+        if(viewX > 0 && viewX < 3725){youLostText->setPos(viewX + 350, 300);}
+        if(viewX >= 3720){youLostText->setPos(4100, 300);}
         scene->addItem(youLostText);
-        updateTextTimer->stop();
 
-        replay = new QPushButton("Replay", this);
-        replay->setGeometry(QRect(QPoint(4500, 400), QSize(100,50)));
+        updateTextTimer->stop();
+        scene->removeItem(plane);
+        scene->removeItem(airspeedText);
+        scene->removeItem(RCtext);
+        scene->removeItem(planeAngleText);
+        scene->removeItem(altitudeText);
+        scene->removeItem(flapAngleText);
+        scene->removeItem(spoilerPosText);
+        scene->removeItem(brakesText);
+
+        replayButton = new QPushButton("Replay", this);
+        replayButton->setGeometry(QRect(QPoint(pos().x() + 400, 400), QSize(50,25)));
+        connect(replayButton, SIGNAL(released()), this, SLOT(replay()));
+        replayButton->show();
+
+        exitButton = new QPushButton("Exit", this);
+        exitButton->setGeometry(QRect(QPoint(pos().x() + 700, 400), QSize(50,25)));
+        connect(exitButton, SIGNAL(released()), this, SLOT(exit()));
+        exitButton->show();
     }
     show();
 
+}
+
+void Game::replay()
+{
+    game->close();
+
+    delete plane;
+    delete engine;
+    scene->removeItem(landingStrip);
+    delete landingStrip;
+    delete exitButton;
+    delete replayButton;
+    scene->removeItem(youLostText);
+    delete youLostText;
+    delete scene;
+
+    crash = false;
+
+    game = new Game();
+    game->show();
+}
+
+void Game::exit()
+{
+    delete plane;
+    scene->removeItem(landingStrip);
+    delete landingStrip;
+    delete engine;
+    delete exitButton;
+    delete replayButton;
+    scene->removeItem(youLostText);
+    delete youLostText;
+    delete scene;
+    exit();
 }

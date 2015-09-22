@@ -12,3 +12,14 @@
 - Added descriptions in the source files about each class (except main)
 - Changed the way altitude is measured, instead of using scene coordinates, multiplies them by a constant to make the max altitude higher and improve density of air calculations for improved accuracy
 - Added key input recognition for spoilers, flaps (up and down) and brakes
+
+---------------------------------21/9/2015--------------------------------------
+- Added replay and exit buttons after crash (almost fully functional, replay for some reason always thinks you crashed after using replay button), should be fixed in the next day or two
+- Modified spoilers so that they control the climb more (speed reducing functionality deleted, may reimplement later on)
+- Brakes are now functioning, didn't work yesterday
+- Data displayed on screen now doesn't go off the left side of the view like it used to
+- Fixed minor errors
+- Updated list of remaining issues in main.cpp
+- Fixed drag (was using abs() instead of fabs(), fabs() is for doubles/floats and abs() for ints)
+- Only missing Plane QPixmap and fix rotation system so that it rotates smooter. Also replay button needs fixing as plane does not show up after releasing button
+

@@ -98,6 +98,7 @@ void Plane::planeThrust()
 {
     if(speed <= thrust * 2.35){speed += 1.175;}
     if(speed > thrust * 2.35){speed -= 1.175;}
+
 }
 
 void Plane::movePlane()
@@ -113,22 +114,24 @@ void Plane::movePlane()
     if(pos().y() < 0 || pos().x() > sceneWidth){
         delete this;
         exit(EXIT_SUCCESS);
-        //return;
+    }
+
+    setRotation(planeAngle);
+    if(brakes > 0 && speed > 0){
+        speed -= sin(speed)*5;
+        thrust = 0;
     }
 
     if(pos().x() > 4400 && pos().y() > screenHeight - 330 && pos().y() < screenHeight -327.5){
         setPos(x() + airspeed *1000/36000, y()); //make altitude equal to y better, that way one bug is avoided where after contact is over or if you overshoot the plane drops to where it was supposed to be
+        altitude = pos().y();
         return;
-    }
-    if(brakes > 0 && speed > 0){
-        speed -= sin(speed);
     }
 
     extern Game *game;
     game->centerOn(this);
 
     altitude += RC;
-    setRotation(planeAngle);
     setPos(x() + airspeed *1000/36000, altitude); // 36000 to make it fit to the scene, should be 3600 for m/s
 
     //qDebug() << pos().x();
@@ -137,5 +140,6 @@ void Plane::movePlane()
     //qDebug()<<planeAngle;
     //qDebug()<<planeMaxSpeed;
     //qDebug()<<flapAngle;
+    //qDebug()<<brakes;
 
 }

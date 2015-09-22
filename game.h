@@ -28,9 +28,12 @@ private:
     QGraphicsTextItem *planeAngleText;
     QGraphicsTextItem *youLostText;
     QTimer *updateTextTimer;
-    QPushButton* replay;
+    QPushButton *replayButton;
+    QPushButton *exitButton;
 private slots:
     void updateText();
+    void replay();
+    void exit();
 
 };
 
