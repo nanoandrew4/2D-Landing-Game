@@ -1,11 +1,11 @@
 #ifndef PLANE
 #define PLANE
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QTimer>
 #include <QObject>
 
-class Plane : public QObject, public QGraphicsRectItem{
+class Plane : public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
     Plane();

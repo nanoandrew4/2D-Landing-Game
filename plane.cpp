@@ -29,7 +29,7 @@ bool crash = false;
 
 Plane::Plane()
 {
-    setRect(0,0,85,50);
+    setPixmap(QPixmap(":/Graphics/Graphics/Plane.png"));
     setPos(75, screenHeight /3);
     setRotation(planeAngle);
     setFlags(QGraphicsItem::ItemIsFocusable);

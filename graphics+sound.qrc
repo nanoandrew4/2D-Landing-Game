@@ -2,5 +2,6 @@
     <qresource prefix="/Graphics">
         <file>Graphics/Background.png</file>
         <file>Graphics/Runway.png</file>
+        <file>Graphics/Plane.png</file>
     </qresource>
 </RCC>

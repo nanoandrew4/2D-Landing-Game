@@ -1,4 +1,4 @@
----------------------------------20/9/2015--------------------------------------
+﻿---------------------------------20/9/2015--------------------------------------
 
 - Remade Runway to fit in better with Background, as well as resizing from 600x120 to 700x140
 - Slowed rate of acceleration and deceleration to add realism (still need tweaking to make smoother)
@@ -22,4 +22,5 @@
 - Updated list of remaining issues in main.cpp
 - Fixed drag (was using abs() instead of fabs(), fabs() is for doubles/floats and abs() for ints)
 - Only missing Plane QPixmap and fix rotation system so that it rotates smooter. Also replay button needs fixing as plane does not show up after releasing button
-
+---------------------------------22/9/2015--------------------------------------
+- Changed sky and sea colour + changed "waves" to make look better in Background.png , changed Runway.png to have grass (various shades), flowers (three colours), smoother/better looking rocks (changed divisory lines and colours), added white lines to runway (with piano tiles at supposed landing position and added Plane.png (based off Cessna 172), only grayscale for now (WIP)
