@@ -30,3 +30,8 @@
 - Cleaned up some code to make more compact
 - Updated Plane.png with colors and resized the image so that it should now touch the runway instead of floating above it
 - Fixed Replay button (finally working, airplane coordinates needed to be re-established after crash)
+- Implemented multi-key recognition, so movement of aircraft is waaaaaaay smoother than before
+- Fixed glitches encountered after implementing multi-key recognition, such as unlimited speed and random sky fallouts
+- Updated Background.png and Runway.png, added some bluring of clouds and rocks
+- Cleaned up some code, started removing debugging features (still work to be done)
+

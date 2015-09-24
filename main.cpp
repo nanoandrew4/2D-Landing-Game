@@ -17,11 +17,11 @@ Game *game;
  * +Implement brakes + spoilers - Limit is 21/9/2015 - Done 21:56 21/9/2015
  * +Fix drag - Limit is 21/9/2015 - Done 22:12 21/9/2015
  * +Make Airplane (Cessna 172) Pixmap - Limit is 21/9/2015 - Done 22:12 21/9/2015
- * Make planeAngle changes smoother
+ * +Make planeAngle changes smoother - Done 22:33 23/9/2015
  * +Make text appear when you land succesfuly - Done 15:26 23/09/2015
- * Improve Airplane
+ * +Improve Airplane - Done 21:51 23/9/2015
  * +Fix replay button - Done 18:08 23/9/2015
- * Disable mouse interaction except after landing - Done 17:41 23/9/2015
+ * Disable mouse interaction except after landing
  * Disable keyboard interaction after crash or succesful landing
  *
  * Secondary:

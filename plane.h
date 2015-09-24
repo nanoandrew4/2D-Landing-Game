@@ -10,6 +10,7 @@ class Plane : public QObject, public QGraphicsPixmapItem{
 public:
     Plane();
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 private slots:
     void movePlane();
     void planeThrust();

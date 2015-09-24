@@ -12,6 +12,8 @@
 #include <cmath>
 #include <math.h>
 #include <QFont>
+#include <cstdlib>
+#include <time.h>
 
 extern int screenHeight;
 extern double altitude;
@@ -41,6 +43,7 @@ double radianConvert = 3.14159265/180;
 
 Engine::Engine()
 {
+    srand(time(0));
     /*
 
     windTimer = new QTimer();
@@ -89,7 +92,7 @@ void Engine::planeMechanics()
         if(spoiler == 2){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *2); RC += (cos(speed*(89.0/speed) *radianConvert) *3);}
 
         //qDebug()<<drag;
-        qDebug()<<RC;
+        //qDebug()<<RC;
         //qDebug()<< planeAngle;
 }
 
@@ -103,6 +106,7 @@ void Engine::wind()
     switch(windRand){
         case 0: //right
     {
+
         break;
     }
         case 1: //left

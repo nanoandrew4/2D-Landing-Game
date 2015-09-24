@@ -27,6 +27,7 @@ int brakes = 0;
 int thrust = 50;
 bool crash = false;
 bool succesfulLanding = false;
+int key[4]; //for ability to recieve 2 keys at once instead of 1, also fixes fluidity when change in planeAngle
 
 Plane::Plane()
 {
@@ -50,48 +51,43 @@ Plane::Plane()
 
 void Plane::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_Up){
-        if(thrust < 100){
-        thrust++;
+    switch (event->key())
+        {
+        case Qt::Key_Up:
+            key[0] = 1;
+            break;
+        case Qt::Key_Down:
+            key[1] = 1;
+            break;
+        case Qt::Key_Left:
+            key[2] = 1;
+            break;
+        case Qt::Key_Right:
+            key[3] = 1;
+            break;
         }
-    }
-    else if(event->key() == Qt::Key_Down){
-        if(thrust > 0){
-        thrust--;
-        }
-    }
-    else if(event->key() == Qt::Key_Right){
-        if(planeAngle < 90){
-            planeAngle++;
-        }
-    }
-    else if(event->key() == Qt::Key_Left){
-        if(planeAngle > -90){
-            planeAngle--;
-        }
-    }
-    else if(event->key() == Qt::Key_F){
-        if(flapAngle < 40){
-            flapAngle++;
-        }
-    }
-    else if(event->key() == Qt::Key_G){
-        if(flapAngle > 0){
-            flapAngle--;
-        }
-    }
-    else if(event->key() == Qt::Key_S){
-        if(spoiler == 2){spoiler = -1;}
-        if(spoiler < 2){spoiler++;}
-    }
-    else if(event->key() == Qt::Key_B && pos().x() > 4400 && pos().y() > screenHeight - 330 && pos().y() < screenHeight -327.5){
-        if(brakes == 1){brakes = -1;}
-        brakes++;
-    }
-    else if(event->key() == Qt::Key_Escape){
-        altitude = pos().y();
-        setPos(x(), y());
-        qDebug()<< "escape pressed";
+}
+
+void Plane::keyReleaseEvent(QKeyEvent *event)
+{
+    switch (event->key())
+    {
+    case Qt::Key_Up:
+        key[0] = 0;
+        qDebug() << "released Up";
+        break;
+    case Qt::Key_Down:
+        key[1] = 0;
+        qDebug() << "released Down";
+        break;
+    case Qt::Key_Left:
+        key[2] = 0;
+        qDebug() << "released Left";
+        break;
+    case Qt::Key_Right:
+        key[3] = 0;
+        qDebug() << "released Right";
+        break;
     }
 }
 
@@ -121,7 +117,17 @@ void Plane::movePlane()
         exit(EXIT_SUCCESS);
     }
 
+    if(key[0] == 1 && key[2] == 1){thrust++; planeAngle--;} //Up arrow + left arrow
+    else if(key[0] == 1 && key[3] == 1){if(thrust < 100){thrust++;} planeAngle++;} //Up arrow + right arrow
+    else if(key[1] == 1 && key[2] == 1){if(thrust > 1){thrust--;} planeAngle--;} //Up arrow + left arrow
+    else if(key[1] == 1 && key[3] == 1){thrust--; planeAngle++;} //Up arrow + right arrow
+    else if(key[0] == 1){thrust++;}
+    else if(key[1] == 1){thrust--;}
+    else if(key[2] == 1){planeAngle--;}
+    else if(key[3] == 1){planeAngle++;}
+
     setRotation(planeAngle);
+
     if(brakes > 0 && speed > 0){
         speed -= sin(speed)*5;
         thrust = 0;
@@ -132,7 +138,7 @@ void Plane::movePlane()
             succesfulLanding = true;
             return;
         }
-        setPos(x() + airspeed *1000/36000, y()); //make altitude equal to y better, that way one bug is avoided where after contact is over or if you overshoot the plane drops to where it was supposed to be
+        setPos(x() + airspeed *1000/36000, y());
         altitude = pos().y();
         return;
     }
@@ -142,13 +148,5 @@ void Plane::movePlane()
 
     altitude += RC;
     setPos(x() + airspeed *1000/36000, altitude); // 36000 to make it fit to the scene, should be 3600 for m/s
-
-    //qDebug() << pos().x();
-    //qDebug()<<altitude;
-    //qDebug()<<airspeed;
-    //qDebug()<<planeAngle;
-    //qDebug()<<planeMaxSpeed;
-    //qDebug()<<flapAngle;
-    //qDebug()<<brakes;
 
 }
