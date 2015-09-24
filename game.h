@@ -27,6 +27,7 @@ private:
     QGraphicsTextItem *brakesText;
     QGraphicsTextItem *planeAngleText;
     QGraphicsTextItem *youLostText;
+    QGraphicsTextItem *youWonText;
     QTimer *updateTextTimer;
     QPushButton *replayButton;
     QPushButton *exitButton;

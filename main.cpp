@@ -16,12 +16,12 @@ Game *game;
  * +Fix altitude display, so that it displays right - Limit is 21/9/2015 - Done 16:55 20/9/2015
  * +Implement brakes + spoilers - Limit is 21/9/2015 - Done 21:56 21/9/2015
  * +Fix drag - Limit is 21/9/2015 - Done 22:12 21/9/2015
- * +Make Airplane (Cessna 172) Pixmap - Limit is 21/9/2015
+ * +Make Airplane (Cessna 172) Pixmap - Limit is 21/9/2015 - Done 22:12 21/9/2015
  * Make planeAngle changes smoother
- * Make text appear when you land succesfuly with score (distance from piano tiles maybe)
+ * +Make text appear when you land succesfuly - Done 15:26 23/09/2015
  * Improve Airplane
- * Fix replay button
- * Disable mouse interaction except after landing
+ * +Fix replay button - Done 18:08 23/9/2015
+ * Disable mouse interaction except after landing - Done 17:41 23/9/2015
  * Disable keyboard interaction after crash or succesful landing
  *
  * Secondary:

@@ -69,11 +69,11 @@ void Engine::planeMechanics()
 
     //drag seems not to be working, check once everything is implemented
 
-        temp = 288.15 - (0.00396 * (3.28/2)) * (screenHeight - altitude *27.7); // temperature in kelvin minus altitude times constant decrease per 2 feet divided by 2 in temperature (from data in performance check). Times 27.7 to make it scaled so that altitudes work compared to actual data
+        temp = 288.15 - (0.00396 * (3.28/2)) * (screenHeight - (altitude *27.7 -3000)); // temperature in kelvin minus altitude times constant decrease per 2 feet divided by 2 in temperature (from data in performance check). Times 27.7 to make it scaled so that altitudes work compared to actual data
         pressure = (2116.2 * pow(0.92532477, (screenHeight - altitude *27.7) /1000)) *psf2Pa; // multiply pressure at 0 feet by the ratio of decrease of pressure every foot. No need for metric conversion since psf is imperial. Taken from pattern in data on flight performance analysis
         density = pressure / (temp * R);
 
-        drag = (speed /10.5) *fabs(cos(((speed)) * radianConvert));; //needs fixing so that is incremental at decent rate, fixed, just using absolute value
+        drag = (speed /8.5) *fabs(cos((speed) * radianConvert));; //needs fixing so that is incremental at decent rate, fixed, just using absolute value
         airspeed = speed - drag; //need to be implemented in the game so that it increases and decreases at a certain rate, done
 
         Cl = speed /145;
@@ -82,14 +82,14 @@ void Engine::planeMechanics()
 
 
         //Tweak RC so that when Angle < 0 it does't increase more
-        if(planeAngle <= 0 && brakes < 1){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /50);}
-        if(planeAngle > 0 && brakes < 1){RC += ((((lift / gravForce) /10) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /5);}
+        if(planeAngle <= 0 && brakes < 1){RC += ((((lift / gravForce) /20) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /17);}
+        if(planeAngle > 0 && brakes < 1){RC += ((((lift / gravForce) /15) * (sin((airspeed / 1.6) *radianConvert)) / cos(flapAngle * radianConvert))* sin(planeAngle*radianConvert) /5);}
 
         if(spoiler == 1){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *9); RC += cos(speed*(89.0/speed) *radianConvert);} //degrees and max speed (235) must be decimals or won't work
         if(spoiler == 2){drag /= (cos(airspeed*(89.0/235.0) *radianConvert) *2); RC += (cos(speed*(89.0/speed) *radianConvert) *3);}
 
         //qDebug()<<drag;
-        //qDebug()<<RC;
+        qDebug()<<RC;
         //qDebug()<< planeAngle;
 }
 
@@ -102,13 +102,21 @@ void Engine::wind()
     windRand = rand() %3;
     switch(windRand){
         case 0: //right
+    {
         break;
+    }
         case 1: //left
+    {
         break;
+    }
         case 2: //down
+    {
         break;
+    }
         case 3: //up
+    {
         break;
+    }
     }
 }
 

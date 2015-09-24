@@ -26,6 +26,7 @@ double altitude = screenHeight /3;
 int brakes = 0;
 int thrust = 50;
 bool crash = false;
+bool succesfulLanding = false;
 
 Plane::Plane()
 {
@@ -54,40 +55,40 @@ void Plane::keyPressEvent(QKeyEvent *event)
         thrust++;
         }
     }
-    if(event->key() == Qt::Key_Down){
+    else if(event->key() == Qt::Key_Down){
         if(thrust > 0){
         thrust--;
         }
     }
-    if(event->key() == Qt::Key_Right){
+    else if(event->key() == Qt::Key_Right){
         if(planeAngle < 90){
             planeAngle++;
         }
     }
-    if(event->key() == Qt::Key_Left){
+    else if(event->key() == Qt::Key_Left){
         if(planeAngle > -90){
             planeAngle--;
         }
     }
-    if(event->key() == Qt::Key_F){
+    else if(event->key() == Qt::Key_F){
         if(flapAngle < 40){
             flapAngle++;
         }
     }
-    if(event->key() == Qt::Key_G){
+    else if(event->key() == Qt::Key_G){
         if(flapAngle > 0){
             flapAngle--;
         }
     }
-    if(event->key() == Qt::Key_S){
+    else if(event->key() == Qt::Key_S){
         if(spoiler == 2){spoiler = -1;}
         if(spoiler < 2){spoiler++;}
     }
-    if(event->key() == Qt::Key_B && pos().x() > 4400 && pos().y() > screenHeight - 330 && pos().y() < screenHeight -327.5){
+    else if(event->key() == Qt::Key_B && pos().x() > 4400 && pos().y() > screenHeight - 330 && pos().y() < screenHeight -327.5){
         if(brakes == 1){brakes = -1;}
         brakes++;
     }
-    if(event->key() == Qt::Key_Escape){
+    else if(event->key() == Qt::Key_Escape){
         altitude = pos().y();
         setPos(x(), y());
         qDebug()<< "escape pressed";
@@ -106,6 +107,10 @@ void Plane::movePlane()
 
     if((-RC < -2.5 && pos().x() > 4400 && pos().y() > screenHeight - 330) || (pos().y() > 600) || (pos().x() > 4265 && pos().y() > screenHeight - 329)){
         crash = true;
+        altitude = screenHeight /3;
+        RC = 0;
+        speed = 117.5;
+        planeAngle = -10;
         moveTimer->stop();
         thrustTimer->stop();
         return;
@@ -123,6 +128,10 @@ void Plane::movePlane()
     }
 
     if(pos().x() > 4400 && pos().y() > screenHeight - 330 && pos().y() < screenHeight -327.5){
+        if(speed <= 5){
+            succesfulLanding = true;
+            return;
+        }
         setPos(x() + airspeed *1000/36000, y()); //make altitude equal to y better, that way one bug is avoided where after contact is over or if you overshoot the plane drops to where it was supposed to be
         altitude = pos().y();
         return;

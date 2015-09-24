@@ -25,6 +25,7 @@ extern int flapAngle;
 extern int spoiler;
 extern int brakes;
 extern bool crash;
+extern bool succesfulLanding;
 extern Game *game;
 
 void Game::drawBackground(QPainter *painter, const QRectF &rect)
@@ -52,6 +53,7 @@ Game::Game()
 
     plane = new Plane();
     scene->addItem(plane);
+
 
     //adding all relevant data to screen
 
@@ -86,9 +88,22 @@ Game::Game()
     youLostText = new QGraphicsTextItem();
     youLostText->setFont(QFont("times", 40));
 
+    youWonText = new QGraphicsTextItem();
+    youWonText->setFont(QFont("times", 40));
+
     updateTextTimer = new QTimer();
     connect(updateTextTimer, SIGNAL(timeout()), this, SLOT(updateText()));
     updateTextTimer->start(1000/30);
+
+    replayButton = new QPushButton("Replay", this);
+    replayButton->setGeometry(QRect(QPoint(pos().x() + 450, 400), QSize(50,25)));
+    connect(replayButton, SIGNAL(released()), this, SLOT(replay()));
+    replayButton->hide();
+
+    exitButton = new QPushButton("Exit", this);
+    exitButton->setGeometry(QRect(QPoint(pos().x() + 700, 400), QSize(50,25)));
+    connect(exitButton, SIGNAL(released()), this, SLOT(exit()));
+    exitButton->hide();
 
     show();
 
@@ -112,7 +127,7 @@ void Game::updateText()
     else if(viewX > 0 && viewX < 3725){RCtext->setPos(viewX, 34);}
     else if(viewX >= 3720){RCtext->setPos(3725, 34);}
 
-    altitudeText->setPlainText((QString("Altitude: ") + QString::number(screenHeight * 27.7 - altitude *27.7)));
+    altitudeText->setPlainText((QString("Altitude: ") + QString::number(screenHeight * 27.7 - altitude *27.7 -3000)));
     if(viewX <= 0){altitudeText->setPos(0,50);}
     else if(viewX > 0 && viewX < 3725){altitudeText->setPos(viewX, 50);}
     else if(viewX >= 3720){altitudeText->setPos(3725, 50);}
@@ -135,15 +150,23 @@ void Game::updateText()
     else if(viewX > 0 && viewX < 3725){brakesText->setPos(viewX, 98);}
     else if(viewX >= 3720){brakesText->setPos(3725, 98);}
 
-    if(crash == true){
-        youLostText->setPlainText("You crashed the airplane");
-        if(viewX <= 0){youLostText->setPos(350, 300);}
-        if(viewX > 0 && viewX < 3725){youLostText->setPos(viewX + 350, 300);}
-        if(viewX >= 3720){youLostText->setPos(4100, 300);}
-        scene->addItem(youLostText);
+    if(succesfulLanding == true || crash == true){
+        if(succesfulLanding == true){
+        youWonText->setPlainText("You landed succesfuly!");
+        youWonText->setPos(4100, 300);
+        scene->addItem(youWonText);
+        }
+        if(crash == true){
+            scene->removeItem(plane);
+            youLostText->setPlainText("You crashed the airplane");
+            if(viewX <= 0){youLostText->setPos(350, 300);}
+            if(viewX > 0 && viewX < 3725){youLostText->setPos(viewX + 350, 300);}
+            if(viewX >= 3720){youLostText->setPos(4100, 300);}
+            scene->addItem(youLostText);
+        }
 
         updateTextTimer->stop();
-        scene->removeItem(plane);
+
         scene->removeItem(airspeedText);
         scene->removeItem(RCtext);
         scene->removeItem(planeAngleText);
@@ -152,18 +175,19 @@ void Game::updateText()
         scene->removeItem(spoilerPosText);
         scene->removeItem(brakesText);
 
-        replayButton = new QPushButton("Replay", this);
-        replayButton->setGeometry(QRect(QPoint(pos().x() + 400, 400), QSize(50,25)));
-        connect(replayButton, SIGNAL(released()), this, SLOT(replay()));
+        delete airspeedText;
+        delete RCtext;
+        delete planeAngleText;
+        delete altitudeText;
+        delete flapAngleText;
+        delete spoilerPosText;
+        delete brakesText;
+
         replayButton->show();
-
-        exitButton = new QPushButton("Exit", this);
-        exitButton->setGeometry(QRect(QPoint(pos().x() + 700, 400), QSize(50,25)));
-        connect(exitButton, SIGNAL(released()), this, SLOT(exit()));
         exitButton->show();
-    }
-    show();
 
+        return;
+    }
 }
 
 void Game::replay()

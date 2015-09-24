@@ -24,3 +24,9 @@
 - Only missing Plane QPixmap and fix rotation system so that it rotates smooter. Also replay button needs fixing as plane does not show up after releasing button
 ---------------------------------22/9/2015--------------------------------------
 - Changed sky and sea colour + changed "waves" to make look better in Background.png , changed Runway.png to have grass (various shades), flowers (three colours), smoother/better looking rocks (changed divisory lines and colours), added white lines to runway (with piano tiles at supposed landing position and added Plane.png (based off Cessna 172), only grayscale for now (WIP)
+---------------------------------23/9/2015--------------------------------------
+- Tweaked RC a bit so that climb and descent are not equal and are more radical (prevents unrealistic angles from happening while descending or ascending)
+- Implemented event for when landing is completed succesfuly (almost identical to crash)
+- Cleaned up some code to make more compact
+- Updated Plane.png with colors and resized the image so that it should now touch the runway instead of floating above it
+- Fixed Replay button (finally working, airplane coordinates needed to be re-established after crash)
