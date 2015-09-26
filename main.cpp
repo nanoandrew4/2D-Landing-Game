@@ -25,10 +25,11 @@ Game *game;
  * Disable keyboard interaction after crash or succesful landing
  *
  * Secondary:
- * Plane acceleration and deceleration is in smaller steps
+ * +Plane acceleration and deceleration is in smaller steps
  * -Add land airport (after 1.0 released)
  * +Improve clouds
  * Implement Wind and MicroBursts
+ * +Add main menu
  */
 
 int main(int argc, char *argv[])

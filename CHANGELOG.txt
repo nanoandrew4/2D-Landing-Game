@@ -34,4 +34,14 @@
 - Fixed glitches encountered after implementing multi-key recognition, such as unlimited speed and random sky fallouts
 - Updated Background.png and Runway.png, added some bluring of clouds and rocks
 - Cleaned up some code, started removing debugging features (still work to be done)
-
+---------------------------------24+25/9/2015--------------------------------------
+- Implemented main menu
+- Added controls button to show controls for the aircraft
+- Tweaked Runway.png, added MainMenuBackground1.png, MainMenuBackgroun2.png and Controls.png
+- Fixed multiple issues related to the main menu
+- Fixed multiple isseues related to multiple key recognition, such as re-implementing flaps, spoilers and brakes, and setting limits
+- In main menu, 3 buttons implemented + will choose random background from the 2 that are in
+- Divided code in Game.cpp in to multiple slots for each button, and cleaned up some other code
+- Substituted some ints for bools, changed how the background is drawn from using drawBackground() to using a QGraphicsPixmapItem
+- Fixed plane not landing on white line
+- User can't change angle below 0 after landing, so that it can't go into the ground

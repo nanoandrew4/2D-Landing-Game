@@ -14,11 +14,17 @@ class Game : public QGraphicsView{
 public:
     Game();
     QGraphicsScene *scene;
+
+private:
+    QGraphicsPixmapItem *landingStrip;
     Plane *plane;
     Engine *engine;
-private:
-    void drawBackground(QPainter *painter, const QRectF &rect);
-    QGraphicsPixmapItem *landingStrip;
+
+    QPushButton *playButton;
+    QPushButton *controlsButton;
+    QGraphicsTextItem *welcomeText;
+    QGraphicsPixmapItem *backgroundImage;
+
     QGraphicsTextItem *airspeedText;
     QGraphicsTextItem *RCtext;
     QGraphicsTextItem *altitudeText;
@@ -28,14 +34,19 @@ private:
     QGraphicsTextItem *planeAngleText;
     QGraphicsTextItem *youLostText;
     QGraphicsTextItem *youWonText;
+
     QTimer *updateTextTimer;
+    QTimer *timer;
+
     QPushButton *replayButton;
     QPushButton *exitButton;
 private slots:
     void updateText();
+    void play();
+    void controls();
     void replay();
+    void mainMenu();
     void exit();
-
 };
 
 #endif // GAME

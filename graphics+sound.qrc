@@ -3,5 +3,8 @@
         <file>Graphics/Background.png</file>
         <file>Graphics/Runway.png</file>
         <file>Graphics/Plane.png</file>
+        <file>Graphics/MainMenuBackground2</file>
+        <file>Graphics/MainMenuBackground1</file>
+        <file>Graphics/Controls.png</file>
     </qresource>
 </RCC>
